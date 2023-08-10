@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <!--开启动态方法调用-->
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <!--设置文件上传大小-->
+    <constant name="struts.multipart.maxSize" value="104857600" />
+
+    <package name="default" extends="struts-default">
+        <global-allowed-methods>regex:.*</global-allowed-methods>
+    </package>
+
+    <package name="test1" extends="default">
+        <!--1.定义拦截器-->
+        <interceptors>
+            <interceptor name="test1" class="interceptor.TestInterceptor1"></interceptor>
+            <interceptor name="test2" class="interceptor.TestInterceptor2"></interceptor>
+        </interceptors>
+
+        <action name="hello" class="action.HelloAction">
+            <result>/success.jsp</result>
+            <!--2.引用拦截器-->
+            <interceptor-ref name="test1"/>
+            <interceptor-ref name="test2"/>
+            <!--3.引用默认的拦截器-->
+           <!-- <interceptor-ref name="defaultStack"/>-->
+        </action>
+    </package>
+
+    <package name="test2" extends="default">
+        <interceptors>
+            <interceptor name="test1" class="interceptor.TestInterceptor1"></interceptor>
+            <interceptor name="test2" class="interceptor.TestInterceptor2"></interceptor>
+            <!--定义拦截器栈-->
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="test1"/>
+                <interceptor-ref name="test2"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <action name="index" class="action.HelloAction" method="hello">
+            <result>/success.jsp</result>
+            <!--引用拦截器栈-->
+            <interceptor-ref name="myStack"/>
+        </action>
+    </package>
+
+    <package name="user" extends="default">
+        <!--1.定义拦截器-->
+        <interceptors>
+            <interceptor name="loginInterceptor" class="interceptor.SystemInterceptor"/>
+            <interceptor-stack name="myLoginStack">
+            <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="loginInterceptor">
+                    <param name="includeMethods">add*,update*,delete*,find*</param>
+
+                    <param name="excludeMethods">login</param>
+                </interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+
+        <action name="user_*" class="action.UserAction" method="{1}">
+            <result>/success.jsp</result>
+            <result name="login">/login.jsp</result>
+
+
+            <interceptor-ref name="myLoginStack"/>
+        </action>
+
+
+        <!--<interceptors>
+            <interceptor name="test1" class="interceptor.TestInterceptor1"></interceptor>
+            <interceptor name="test2" class="interceptor.TestInterceptor2"></interceptor>
+        </interceptors>
+        <action name="user_*" class="action.UserAction" method="{1}">
+            <result>/success.jsp</result>
+            <result name="login">/login.jsp</result>
+            &lt;!&ndash;2.引用拦截器&ndash;&gt;
+           &lt;!&ndash; <interceptor-ref name="test1"/>&ndash;&gt;
+            &lt;!&ndash;3.引用默认的拦截器  必须引用默认拦截器&ndash;&gt;
+            <interceptor-ref name="defaultStack"/>
+        </action>-->
+    </package>
+
+    <package name="upload" extends="default">
+        <action name="upload" class="action.UploadAction" method="uploadBySimple">
+            <result>/success.jsp</result>
+        </action>
+        <action name="moreUpload" class="action.MoreUploadAction" method="uploadBySimple">
+            <result>/success.jsp</result>
+        </action>
+    </package>
+
+    <package name="download" extends="default">
+        <action name="download" class="action.DownloadAction" method="download">
+            <result name="success" type="stream">
+                <!--设置文件下载类型 application/octet-stream表示下载任意文件类型-->
+            <param name="contentType">application/octet-stream</param>
+                <!--设置参数名称inputName,参数值时inputStream,这个inputStream是DownloadAction
+                的成员变量-->
+            <param name="inputName">inputStream</param>
+                <!--设置以附件的形式下载-->
+            <param name="contentDisposition">attachment;filename="${fileName}"</param>
+                <!--缓冲区大小-->
+            <param name="bufferSize">4096</param>
+            </result>
+        </action>
+    </package>
+
+
+
+</struts>

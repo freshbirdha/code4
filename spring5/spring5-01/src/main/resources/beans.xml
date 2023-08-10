@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- bean definitions here -->
+    <!--使用Spring来创建对象,在Spring这些都称为Bean bean=对象-->
+    <!--id:bean的唯一标识符 也就是对象名
+    class:bean对象所对应的全限定名:package名+类型
+    name: 也是别名 而且name可以取多个别名-->
+   <!-- <bean id="hello" class="pojo.HelloSpring">
+        <property name="str" value="Spring"/>
+    </bean>-->
+    <!--默认无参构造实现-->
+   <!-- <bean id="user" class="pojo.User">
+        <property name="name" value="斑马"/>
+    </bean>-->
+    <!--直接通过参数名来设置 有参的对象-->
+  <!--<bean id="user" class="pojo.User">
+       <constructor-arg name="name" value="日本"/>
+    </bean>-->
+
+    <!--通过下标赋值 有参的对象-->
+   <!-- <bean id="user" class="pojo.User">
+        <constructor-arg index="0" value="Spring框架"/>
+    </bean>-->
+
+    <bean id="address" class="pojo.Address">
+        <property name="address" value="东京"/>
+    </bean>
+    <bean id="student" class="pojo.Student">
+        <!--普通注入,value-->
+        <property name="name" value="东京斑马编程教室"/>
+        <!--Bean注入,ref-->
+        <property name="address" ref="address"/>
+        <!--数组注入,ref-->
+        <property name="books">
+            <array>
+                <value>笑傲江湖</value>
+                <value>天龙八部</value>
+                <value>西游记</value>
+                <value>三国演义</value>
+            </array>
+        </property>
+        <!--List-->
+        <property name="hobbies">
+            <list>
+                <value>听歌</value>
+                <value>敲代码</value>
+                <value>跑步</value>
+            </list>
+        </property>
+        <!--Map-->
+        <property name="card">
+            <map>
+                <entry key="学生证" value="110"/>
+                <entry key="身份证" value="120"/>
+                <entry key="银行卡" value="1234567890"/>
+            </map>
+        </property>
+        <!--Set-->
+        <property name="games">
+            <set>
+                <value>LOL</value>
+                <value>CS</value>
+                <value>CF</value>
+            </set>
+        </property>
+        <!--null-->
+        <property name="wife">
+            <null/>
+        </property>
+        <!--properties-->
+        <property name="info">
+            <props>
+                <prop key="学号">2023001</prop>
+                <prop key="性别">男</prop>
+                <prop key="username">root</prop>
+                <prop key="password">root</prop>
+            </props>
+        </property>
+    </bean>
+<!--    <bean id="cat" class="pojo.Cat"/>
+    <bean id="dog" class="pojo.Dog"/>
+    &lt;!&ndash;byName:会自动在容器上下文中查找 和自己对象Set方法后面的对应的bean id
+             setDog(Dog dog)
+             setCat(Cat cat)
+        byType:会自动在容器上下文中查找 和自己对象属性类型相同的bean(id可省略 有class就可以访问到)
+     &ndash;&gt;
+    <bean id="people" class="pojo.People" autowire="byName">
+        <property name="name" value="斑马"/>
+      &lt;!&ndash;  <property name="cat" ref="cat"/>
+        <property name="dog" ref="dog"/>&ndash;&gt;
+    </bean>-->
+
+
+</beans>

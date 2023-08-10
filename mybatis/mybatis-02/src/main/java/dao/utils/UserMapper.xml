@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.utils.UserMapper">
+    <!--结果集映射,数据库中的字段和property实体类中的属性不一致才需要进行映射-->
+    <!--<resultMap id="UserMap" type="User">
+        &lt;!&ndash;column数据库中的字段 property实体类中的属性&ndash;&gt;
+        <result column="pwd" property="password"/>
+    </resultMap>-->
+
+
+    <select id="getUserList" resultType="user">
+        select * from mybatis.user
+    </select>
+
+    <select id="getUserById" parameterType="int" resultType="user">
+        select * from mybatis.user where id = #{id}
+    </select>
+
+ <!--   <select id="getUserLike" resultType="user">
+        select * from mybatis.user where name like "%"#{value}"%"
+    </select>-->
+
+
+    <insert id="addUser" parameterType="user">
+        insert into mybatis.user(id,name,pwd) values(#{id},#{name},#{pwd});
+    </insert>
+
+    <insert id="addUser2" parameterType="map">
+        insert into mybatis.user(id,name,pwd) values(#{userid},#{userName},#{password});
+    </insert>
+
+    <update id="updateUser" parameterType="user">
+       update mybatis.user set name=#{name},pwd=#{pwd}  where id = #{id}
+    </update>
+    
+    <delete id="deleteUser" parameterType="int">
+        delete from mybatis.user where id = #{id}
+    </delete>
+
+
+</mapper>
